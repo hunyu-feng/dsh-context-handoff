@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Context Handoff",
+    "description": "Shows live context pressure and, near the limit, hands the work to a fresh session with a summary and continues automatically."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "dsh-context-handoff",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Watches context pressure and, near the limit, hands the work to a fresh session with a summary and continues automatically.",
+  "license": "MIT",
+  "author": "hunyu-feng",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunyu-feng/dsh-context-handoff.git"
+  },
+  "homepage": "https://github.com/hunyu-feng/dsh-context-handoff#readme",
+  "bugs": {
+    "url": "https://github.com/hunyu-feng/dsh-context-handoff/issues"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "context-window",
+    "session-handoff",
+    "auto-continue"
+  ],
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "locale",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  }
+}
