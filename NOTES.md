@@ -8,12 +8,15 @@
 DSH 的上下文守卫插件，两半协作：
 
 - 宿主半 `index.js`：`inject = ['webServer', 'tokenMeter', 'llm']`，监听 `session/event`，
-  用 `tokenMeter.measure` 和模型的 contextWindow 算出每个活跃会话的占用比例（内存里最多跟踪
-  64 个会话），并暴露两个同源路由：
+  算每个活跃会话的占用比例（内存里最多跟踪 64 个会话）。占用**优先读 DSH 的
+  `sessionProjections.stateOf(session, 'contextPressure')` 投影**（与界面自带的「上下文已用 %」同一口径，
+  取 `pressureTokens + surfaceTokens - sampledSurfaceTokens`），只有投影不可用时才退回
+  `tokenMeter.measure` + 模型 contextWindow。两条同源路由：
   - `GET /context-handoff/api/state?sessionId=<id>` → 当前占用（未跟踪的会话返回 404 `session not tracked`）
   - `POST /context-handoff/api/brief` → 让当前模型写一份 ≤800 字的交接说明
 - 客户端半 `client.js`：输入框下方胶囊（`上下文 42.1%` + 绿/黄/红进度），到阈值时依次
-  `sessions.create()` → `prompt()` 发摘要 → `uiWorkspace.openSession()` 自动切过去。
+  `sessions.create()` → `prompt()` 发摘要 → `uiWorkspace.openSession()` 自动切过去；
+  「立即交接」需要点两次（第一次变红确认）防止误触。
 
 - 包名 / 目录名 / 仓库名：`dsh-context-handoff`
 - 仓库：https://github.com/hunyu-feng/dsh-context-handoff
