@@ -12,7 +12,7 @@
   2. 新建一个空白会话（同一工作区、同一 Agent 预设）；
   3. 把交接说明作为第一条消息发给新会话，它会直接开始干活；
   4. 界面自动切到新会话。
-- **手动交接**：点一下胶囊里的「立即交接」，随时换会话。
+- **手动交接**：点一下胶囊里的「立即交接」会先变红提示，**再点一次确认**才执行，防止误触。
 - **失败可重试**：摘要失败或新建会话失败会显示原因，点「重试」。
 
 ## 阈值
@@ -33,7 +33,7 @@ dsh plugin install /path/to/dsh-context-handoff
 
 | 半边 | 文件 | 职责 |
 | --- | --- | --- |
-| Host | `index.js` | 监听 `session/event` 测上下文压力（`tokenMeter.measure` / 模型 contextWindow）；`/context-handoff/api/state` 返回占用；`/context-handoff/api/brief` 调当前模型写交接摘要 |
+| Host | `index.js` | 监听 `session/event`，读 DSH 的 `contextPressure` 会话投影（最近一次请求的实际 prompt 大小 + 增量，与界面自带的「上下文已用 %」同一口径）；`/context-handoff/api/state` 返回占用；`/context-handoff/api/brief` 调当前模型写交接摘要 |
 | Client | `client.js` | 输入框 dock 胶囊；到阈值时取摘要 → `sessions.create()` → `prompt()` 发摘要 → `uiWorkspace.openSession()` 切会话 |
 
 ## 数据与隐私
